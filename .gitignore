@@ -3,15 +3,6 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# Historical data folders (exclude all date folders)
-20[0-9][0-9]-[0-1][0-9]-[0-3][0-9]/
-**/20[0-9][0-9]-[0-1][0-9]-[0-3][0-9]/
-
-# Database files
-*.db
-*.sqlite
-*.sqlite3
-
 # Distribution / packaging
 .Python
 build/
