@@ -1,0 +1,1 @@
+& "C:\Users\hp\Desktop\ship 2\.venv\Scripts\python.exe" scrape_kpt.py
