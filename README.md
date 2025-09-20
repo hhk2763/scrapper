@@ -1,42 +1,39 @@
-# KPT Data Scraper
+# Shipping Data Scraper
 
-This repository automatically scrapes shipping intelligence data from Karachi Port Trust (KPT) website daily using GitHub Actions.
+This repository contains a Python script that scrapes publicly available shipping intelligence data using GitHub Actions for automation.
 
-## 📊 What it scrapes:
-- Expected Arrivals
-- Ships Off Port  
-- Ship Departures
-- Ships On Port
-- Related PDF documents
+## 📊 Features:
+- Automated data collection from shipping websites
+- Excel file generation with structured data
+- PDF document archival
+- SQLite database for data persistence
+- Scheduled execution via GitHub Actions
 
-## 🗂️ Data Storage:
-- Excel files saved in date-named folders (e.g., `2025-09-20/`)
-- PDF documents downloaded to the same folders
-- SQLite database (`shipping_intelligence.db`) for historical data
+## 🗂️ Data Organization:
+- Files organized in date-named folders
+- Excel format for easy analysis
+- PDF documents for reference
+- Historical data tracking
 
-## ⏰ Schedule:
-- Runs automatically every day at 12:00 AM UTC
-- Can be triggered manually from GitHub Actions tab
+## ⏰ Automation:
+- Runs automatically on a daily schedule
+- Manual execution available via GitHub Actions
+- No server maintenance required
 
-## 📁 Folder Structure:
+## 📁 Output Structure:
 ```
-├── 2025-09-20/
-│   ├── expected_arrival.xlsx
-│   ├── 2025-09-20_berthing-pre-plan.pdf
-│   ├── 2025-09-20_daily-tonnage.pdf
-│   ├── 2025-09-20_port-operations.pdf
-│   └── 2025-09-20_teus-handling.pdf
-├── 2025-09-21/
-│   └── ... (next day's data)
-└── shipping_intelligence.db
+├── YYYY-MM-DD/
+│   ├── data.xlsx
+│   └── documents.pdf
+└── database.db
 ```
 
 ## 🔧 Setup:
-1. Push this repository to GitHub
-2. Enable Actions in repository settings
-3. The workflow will run automatically daily
+1. Fork or clone this repository
+2. Enable GitHub Actions in repository settings
+3. The workflow will run automatically on schedule
 
-## 📈 Viewing Data:
-- Browse the date folders for daily data
-- Download the Excel files or PDFs as needed
-- Access historical data from the SQLite database
+## 📈 Usage:
+- Check the dated folders for daily data
+- Download files as needed
+- Access historical information from the database
