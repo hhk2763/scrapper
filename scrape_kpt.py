@@ -29,6 +29,7 @@ def pdf_to_excel_sheet(pdf_path, excel_path, sheet_name):
         print(f"PyPDF failed for {pdf_path}: {e}")
 import os
 from datetime import datetime
+import pytz
 PORT_OPERATIONS_URL = "https://kpt.gov.pk/pages/79/port-operations"
 TEUS_HANDLING_URL = "https://kpt.gov.pk/pages/77/teus-handling"
 # Create a folder named with today's date (Pakistani timezone)
@@ -131,7 +132,6 @@ import requests
 from bs4 import BeautifulSoup
 import sqlite3
 from datetime import datetime
-import pytz
 import openpyxl
 
 
