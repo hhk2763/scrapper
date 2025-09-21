@@ -31,8 +31,10 @@ import os
 from datetime import datetime
 PORT_OPERATIONS_URL = "https://kpt.gov.pk/pages/79/port-operations"
 TEUS_HANDLING_URL = "https://kpt.gov.pk/pages/77/teus-handling"
-# Create a folder named with today's date
-today_folder = datetime.now().strftime('%Y-%m-%d')
+# Create a folder named with today's date (Pakistani timezone)
+pk_tz = pytz.timezone('Asia/Karachi')
+pk_now = datetime.now(pk_tz)
+today_folder = pk_now.strftime('%Y-%m-%d_%H-%M-%S')
 os.makedirs(today_folder, exist_ok=True)
 today_str = today_folder
 def download_pdfs_and_convert():
@@ -129,6 +131,7 @@ import requests
 from bs4 import BeautifulSoup
 import sqlite3
 from datetime import datetime
+import pytz
 import openpyxl
 
 
@@ -144,7 +147,8 @@ PAGES = [
 
 # Database and Excel setup
 DB_NAME = "shipping_intelligence.db"
-today_str = datetime.now().strftime('%Y-%m-%d')
+# Use the same Pakistani timezone timestamp
+today_str = pk_now.strftime('%Y-%m-%d_%H-%M-%S')
 EXCEL_NAME = os.path.join(today_folder, "expected_arrival.xlsx")
 
 def create_tables(conn):
@@ -187,7 +191,7 @@ def scrape_and_store():
             ws.append([updated_on])
             ws.append([])  # Blank row for separation
 
-        last_updated = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        last_updated = pk_now.strftime('%Y-%m-%d %H:%M:%S %Z')
 
         tables = soup.find_all('table', class_='ContainerGrid')
         for table in tables:
