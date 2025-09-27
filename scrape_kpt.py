@@ -2,6 +2,10 @@ BERTHING_PRE_PLAN_URL = "https://kpt.gov.pk/pages/80/berthing-pre-plan"
 DAILY_TONNAGE_URL = "https://kpt.gov.pk/pages/78/daily-tonnage"
 import pandas as pd
 from pypdf import PdfReader
+import urllib3
+
+# Disable SSL warnings for sites with certificate issues
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 def pdf_to_excel_sheet(pdf_path, excel_path, sheet_name):
     """
@@ -40,7 +44,7 @@ os.makedirs(today_folder, exist_ok=True)
 today_str = today_folder
 def download_pdfs_and_convert():
     # Download from Berthing Pre Plan page
-    bpp_response = requests.get(BERTHING_PRE_PLAN_URL)
+    bpp_response = requests.get(BERTHING_PRE_PLAN_URL, verify=False)
     bpp_soup = BeautifulSoup(bpp_response.text, 'html.parser')
     bpp_links = bpp_soup.find_all('a', href=True)
     for link in bpp_links:
@@ -54,13 +58,13 @@ def download_pdfs_and_convert():
             file_path = os.path.join(today_folder, file_name)
             print(f"Downloading {file_url} to {file_path}")
             try:
-                file_resp = requests.get(file_url)
+                file_resp = requests.get(file_url, verify=False)
                 with open(file_path, 'wb') as f:
                     f.write(file_resp.content)
             except Exception as e:
                 print(f"Failed to download {file_url}: {e}")
     # Download from Daily Tonnage page
-    daily_response = requests.get(DAILY_TONNAGE_URL)
+    daily_response = requests.get(DAILY_TONNAGE_URL, verify=False)
     daily_soup = BeautifulSoup(daily_response.text, 'html.parser')
     daily_links = daily_soup.find_all('a', href=True)
     for link in daily_links:
@@ -74,7 +78,7 @@ def download_pdfs_and_convert():
             file_path = os.path.join(today_folder, file_name)
             print(f"Downloading {file_url} to {file_path}")
             try:
-                file_resp = requests.get(file_url)
+                file_resp = requests.get(file_url, verify=False)
                 with open(file_path, 'wb') as f:
                     f.write(file_resp.content)
             except Exception as e:
@@ -82,7 +86,7 @@ def download_pdfs_and_convert():
     # Folder already created above
 
     # Download from Port Operations page
-    response = requests.get(PORT_OPERATIONS_URL)
+    response = requests.get(PORT_OPERATIONS_URL, verify=False)
     soup = BeautifulSoup(response.text, 'html.parser')
     links = soup.find_all('a', href=True)
     for link in links:
@@ -101,14 +105,14 @@ def download_pdfs_and_convert():
             file_path = os.path.join(today_folder, file_name)
             print(f"Downloading {file_url} to {file_path}")
             try:
-                file_resp = requests.get(file_url)
+                file_resp = requests.get(file_url, verify=False)
                 with open(file_path, 'wb') as f:
                     f.write(file_resp.content)
             except Exception as e:
                 print(f"Failed to download {file_url}: {e}")
 
     # Download from TEUS Handling page
-    teus_response = requests.get(TEUS_HANDLING_URL)
+    teus_response = requests.get(TEUS_HANDLING_URL, verify=False)
     teus_soup = BeautifulSoup(teus_response.text, 'html.parser')
     teus_links = teus_soup.find_all('a', href=True)
     for link in teus_links:
@@ -122,7 +126,7 @@ def download_pdfs_and_convert():
             file_path = os.path.join(today_folder, file_name)
             print(f"Downloading {file_url} to {file_path}")
             try:
-                file_resp = requests.get(file_url)
+                file_resp = requests.get(file_url, verify=False)
                 with open(file_path, 'wb') as f:
                     f.write(file_resp.content)
             except Exception as e:
@@ -179,7 +183,7 @@ def scrape_and_store():
 
     for page_name, page_url in PAGES:
         print(f"Scraping {page_name}: {page_url}")
-        response = requests.get(page_url)
+        response = requests.get(page_url, verify=False)
         soup = BeautifulSoup(response.text, 'html.parser')
         ws = wb.create_sheet(title=page_name[:31])  # Excel sheet name max 31 chars
 
