@@ -53,3 +53,7 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+
+# Generated reports
+*_report_*.xlsx
+custom_report_*.xlsx
