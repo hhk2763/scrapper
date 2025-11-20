@@ -5,3 +5,5 @@ pandas
 pypdf
 pytz
 urllib3
+flask
+flask-cors
