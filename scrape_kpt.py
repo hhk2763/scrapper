@@ -44,94 +44,22 @@ today_folder = pk_now.strftime('%Y-%m-%d_%H-%M-%S')
 os.makedirs(today_folder, exist_ok=True)
 today_str = today_folder
 def download_pdfs_and_convert():
-    # Download from Berthing Pre Plan page
-    bpp_response = requests.get(BERTHING_PRE_PLAN_URL, verify=False)
-    bpp_soup = BeautifulSoup(bpp_response.text, 'html.parser')
-    bpp_links = bpp_soup.find_all('a', href=True)
-    for link in bpp_links:
-        href = link['href']
-        if href.lower().endswith('.pdf') or 'rwcgi60.exe' in href:
-            if not href.startswith('http'):
-                file_url = 'https://kpt.gov.pk' + href if href.startswith('/') else href
-            else:
-                file_url = href
-            file_name = f"{today_str}_berthing-pre-plan.pdf"
-            file_path = os.path.join(today_folder, file_name)
-            print(f"Downloading {file_url} to {file_path}")
-            try:
-                file_resp = requests.get(file_url, verify=False)
-                with open(file_path, 'wb') as f:
-                    f.write(file_resp.content)
-            except Exception as e:
-                print(f"Failed to download {file_url}: {e}")
-    # Download from Daily Tonnage page
-    daily_response = requests.get(DAILY_TONNAGE_URL, verify=False)
-    daily_soup = BeautifulSoup(daily_response.text, 'html.parser')
-    daily_links = daily_soup.find_all('a', href=True)
-    for link in daily_links:
-        href = link['href']
-        if href.lower().endswith('.pdf') or 'rwcgi60.exe' in href:
-            if not href.startswith('http'):
-                file_url = 'https://kpt.gov.pk' + href if href.startswith('/') else href
-            else:
-                file_url = href
-            file_name = f"{today_str}_daily-tonnage.pdf"
-            file_path = os.path.join(today_folder, file_name)
-            print(f"Downloading {file_url} to {file_path}")
-            try:
-                file_resp = requests.get(file_url, verify=False)
-                with open(file_path, 'wb') as f:
-                    f.write(file_resp.content)
-            except Exception as e:
-                print(f"Failed to download {file_url}: {e}")
-    # Folder already created above
-
-    # Download from Port Operations page
-    response = requests.get(PORT_OPERATIONS_URL, verify=False)
-    soup = BeautifulSoup(response.text, 'html.parser')
-    links = soup.find_all('a', href=True)
-    for link in links:
-        href = link['href']
-        if href.lower().endswith('.pdf') or 'rwcgi60.exe' in href:
-            if not href.startswith('http'):
-                file_url = 'https://kpt.gov.pk' + href if href.startswith('/') else href
-            else:
-                file_url = href
-            # Use context-based naming for rwcgi60.exe links
-            if 'rwcgi60.exe' in href:
-                file_name = f"{today_str}_port-operations.pdf"
-            else:
-                base_name = file_url.split('/')[-1].split('?')[0] or 'downloaded_file.pdf'
-                file_name = f"{today_str}_{base_name}"
-            file_path = os.path.join(today_folder, file_name)
-            print(f"Downloading {file_url} to {file_path}")
-            try:
-                file_resp = requests.get(file_url, verify=False)
-                with open(file_path, 'wb') as f:
-                    f.write(file_resp.content)
-            except Exception as e:
-                print(f"Failed to download {file_url}: {e}")
-
-    # Download from TEUS Handling page
-    teus_response = requests.get(TEUS_HANDLING_URL, verify=False)
-    teus_soup = BeautifulSoup(teus_response.text, 'html.parser')
-    teus_links = teus_soup.find_all('a', href=True)
-    for link in teus_links:
-        href = link['href']
-        if href.lower().endswith('.pdf') or 'rwcgi60.exe' in href:
-            if not href.startswith('http'):
-                file_url = 'https://kpt.gov.pk' + href if href.startswith('/') else href
-            else:
-                file_url = href
-            file_name = f"{today_str}_teus-handling.pdf"
-            file_path = os.path.join(today_folder, file_name)
-            print(f"Downloading {file_url} to {file_path}")
-            try:
-                file_resp = requests.get(file_url, verify=False)
-                with open(file_path, 'wb') as f:
-                    f.write(file_resp.content)
-            except Exception as e:
-                print(f"Failed to download {file_url}: {e}")
+    # PDF URLs are fixed CGI endpoints - download directly via Worker
+    pdfs = [
+        ("berthing-pre-plan", "http://antares.kpt.gov.pk:90/dev60cgi/rwcgi60.exe?pplan"),
+        ("daily-tonnage",     "http://antares.kpt.gov.pk:90/dev60cgi/rwcgi60.exe?shipcargo"),
+        ("port-operations",   "http://antares.kpt.gov.pk:90/dev60cgi/rwcgi60.exe?cargo"),
+        ("teus-handling",     "http://antares.kpt.gov.pk:90/dev60cgi/rwcgi60.exe?tues"),
+    ]
+    for name, url in pdfs:
+        file_path = os.path.join(today_folder, f"{today_str}_{name}.pdf")
+        print(f"Downloading {url} to {file_path}")
+        try:
+            file_resp = requests.get(WORKER_URL, params={"url": url})
+            with open(file_path, 'wb') as f:
+                f.write(file_resp.content)
+        except Exception as e:
+            print(f"Failed to download {url}: {e}")
 
 import requests
 from bs4 import BeautifulSoup
