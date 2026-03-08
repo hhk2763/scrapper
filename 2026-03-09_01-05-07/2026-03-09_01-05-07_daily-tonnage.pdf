@@ -1,0 +1,12 @@
+<HTML>
+<HEAD>
+<TITLE>Oracle Reports Server CGI</TITLE>
+</HEAD>
+<BODY>
+<CENTER><H1>
+Error: The requested URL was not found, or cannot be served at this time.
+</CENTER></H1>
+Oracle Reports Server CGI - Report Job has terminated with error.<P><B>Reports Server Replies: </B><BR>
+<PRE>REP-0501: Unable to connect to the specified database.</PRE><BR></BODY>
+</HTML>
+
